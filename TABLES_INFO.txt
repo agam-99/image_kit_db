@@ -1,0 +1,58 @@
+A) directory_item (stores name of all files/folder in our directory)
+   
+   item_id: PK
+   type: whether the item is file or a folder (0-folder   1-file )
+   name: name of file/folder
+   date: date at which the file/folder is added.
+
+Query:
+
+CREATE TABLE imagekit.directory_item (
+	`type` BOOL NOT NULL,
+	name varchar(100) NOT NULL,
+	`date` DATE NULL,
+	item_id INT auto_increment NOT null primary key
+);
+
+
+
+B) file_info (stores info of all the files in our directories)
+
+ id: PK
+file_id: foreign key from directory_item table
+format: format of the file
+size: size of the file
+dimension: dimension of the file
+file_data: file/img data which can be stored in binary encoded format
+
+Query:
+
+CREATE TABLE imagekit.file_info (
+    id INT auto_increment NOT null primary key,
+     file_id INT not null,
+	format varchar(100) NULL,
+	`size` BIGINT NULL,
+	dimensions varchar(100) NULL,
+     file_data BINARY NULL,
+    CONSTRAINT file_id FOREIGN KEY (file_id )
+    REFERENCES imagekit.directory_item(id)
+);
+
+
+C) parent_child (stores parent-child relation between directory items and maintain the hierarchy in our directory)
+
+id: PK
+parent_id: foreign key from directory_item table
+child_id: foreign key from directory_item table
+
+Query:
+
+CREATE TABLE imagekit.parent_child (
+     child_id INT not null,
+    parent_id INT not null,
+    CONSTRAINT child_id FOREIGN KEY (child_id)
+    REFERENCES imagekit.directory_item(item_id),
+    CONSTRAINT parent_id FOREIGN KEY (parent_id)
+    REFERENCES imagekit.directory_item(item_id),
+    id INT auto_increment NOT null primary key
+);
