@@ -1,0 +1,42 @@
+(A)
+insert into directory_item(type,name,date)
+values(0,'folder4',DATE '2010-05-30');
+
+insert into file_info(format,size,dimensions,file_id)   // file_id is the id we get after executing the above query
+values('jpg',34,'20x20',9);
+
+INSERT INTO parent_child(parent_id,child_id) Values (1,11);  // parent_id is the id of the folder where we want to insert
+
+
+(B)
+select * from directory_item where type=1 order by date desc;
+
+
+(C)
+The logic is get the immediate child info the folder whose size we want to calculate (from parent_child table) and then find the size of the child file from the file_info table. And if the child is a folder the recursively run this query on the child item until we don't have that parent_child relation in the table
+
+I haven't worked much with sql databases so not sure how to write a recursive query, but should be fairly simple :D
+
+
+(D) 
+same logic as the above query but now instead of caluculation size recursively we delete the files/folders  :)
+
+
+(E)
+SELECT *
+FROM directory_item ,file_info
+WHERE  file_info.file_id =directory_item.item_id
+AND directory_item.name LIKE '%fi%';
+
+
+(F)
+SELECT *
+FROM directory_item ,file_info
+WHERE  file_info.file_id =directory_item.item_id
+AND directory_item.name = 'File1' and file_info.format = 'png';
+
+
+(G)
+UPDATE directory_item
+SET name = 'NestedFolder2'
+WHERE name = 'SubFolder2';
